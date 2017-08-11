@@ -1,0 +1,52 @@
+{
+    "button": [
+       {
+            "name": "便利生活", 
+            "sub_button": [
+                {
+                    "type": "view",
+                    "name": "附近车位", 
+                    "url": "http://konytest.wicp.net/weixin/i?method=chewei"
+                }, 
+                {
+                    "type": "click",
+                    "name": "本市黄页",
+                    "key": "city_huangye"
+                }, 
+                {
+                    "type": "click",
+                    "name": "今天天气",
+                    "key": "today_tianqi"
+                }
+            ]
+        }, 
+        {
+            "name": "优惠生活", 
+            "sub_button": [
+                {
+                    "type": "view",
+                    "name": "本地优惠", 
+                    "url": "http://konytest.wicp.net/weixin"
+                }
+            ]
+        }, 
+        {
+            "name": "我的专属",
+            "sub_button": [
+                {
+                    "type": "click",
+                    "name": "我的会员", 
+					"key": "codeing"
+                }
+            ]
+        }
+    ]
+}
+
+服务器:
+AppID(应用ID)wxca2b2e412f61a85c
+AppSecret(应用密钥)a052b99fc2da608c556018ca1c2f2b8d
+
+测试机:
+AppID(应用ID)wxeaab9d9ac7860897
+AppSecret(应用密钥)410234f7201c66825119799b1ce92d57

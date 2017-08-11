@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+
+touch /var/lock/subsys/local
+
+#NAT
+export WAN_INTERFACE=eth0
+
+service iptables restart
+
+iptables -F
+iptables -t nat -F
+iptables -t filter -F
+iptables -t raw -F
+iptables -t mangle -F
+
+#为内网192.168.9.0/24提供路由转发
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -s 192.168.9.0/24 -o $WAN_INTERFACE -j MASQUERADE
+

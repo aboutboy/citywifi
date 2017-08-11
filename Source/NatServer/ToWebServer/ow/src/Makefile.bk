@@ -1,0 +1,11 @@
+# build ToWebServer executable when user executes "make"
+ToWebServer: main.o
+	$(CC) $(LDFLAGS) main.o -o ToWebServer
+
+main.o: main.c
+	$(CC) $(CFLAGS) -c main.c -g -Wall
+
+# remove object files and executable when user executes "make clean"
+clean:
+	rm -rf *.o ToWebServer
+	

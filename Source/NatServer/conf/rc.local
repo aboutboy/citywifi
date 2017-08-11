@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+
+touch /var/lock/subsys/local
+
+mkdir /home/log
+
+date > /home/log/111.check
+
+sh /home/jjshe/iptables.sh
+
+date > /home/log/222.check
+
+insmod /home/jjshe/Pre_routing_hook.ko
+
+date > /home/log/333.check
+
+
+#限速配置
+#清除$LAN_INTERFACE口现有的队列
+tc qdisc del dev $LAN_INTERFACE root
+#为eth0添加一个root(根)队列,句柄为1:,类型为htb队列,未分类的流量都将分配给类别1:0
+tc qdisc add dev $LAN_INTERFACE root handle 1: htb default 0
+#在根队列1:中,创建一个标识为1:1的类别，速率从512kbit到512kbit
+tc class add dev $LAN_INTERFACE parent 1: classid 1:1 htb rate 512kbit ceil 512kbit
+#在根队列1:中,创建一个标识为1:2的类别，速率从2mbit到2mbit
+tc class add dev $LAN_INTERFACE parent 1: classid 1:2 htb rate 2mbit ceil 2mbit
+#VIP类别为0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip src 172.16.7.9 flowid 1:0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip dst 172.16.7.9 flowid 1:0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip src 172.16.7.7 flowid 1:0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip dst 172.16.7.7 flowid 1:0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip src 172.16.7.6 flowid 1:0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip dst 172.16.7.6 flowid 1:0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip src 172.16.7.8 flowid 1:0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip dst 172.16.7.8 flowid 1:0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip src 172.16.7.19 flowid 1:0
+#tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip dst 172.16.7.19 flowid 1:0
+#内网上传带宽默认由1:1类别控制
+tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip src 172.16.0.0/16 flowid 1:1
+#内网下载带宽默认由1:2类别控制
+tc filter add dev $LAN_INTERFACE parent 1: protocol ip prio 4 u32 match ip dst 172.16.0.0/16 flowid 1:2
+
+date > /home/log/444.check

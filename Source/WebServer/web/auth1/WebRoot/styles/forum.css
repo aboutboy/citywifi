@@ -1,0 +1,15 @@
+th {
+    background-color: #0099CC;
+}
+
+.odd {
+    background-color: #EEEEEE;
+}
+
+.even {
+    background-color: #FFFFFF;
+}
+
+.highlight {
+    background-color: #CCDDFF;
+}

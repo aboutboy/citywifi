@@ -1,0 +1,7 @@
+urlid contact
+url jdbc:hsqldb:file:../database/hsqldb/forum
+username sa
+driver org.hsqldb.jdbcDriver
+charset utf-8
+truststore true
+password
